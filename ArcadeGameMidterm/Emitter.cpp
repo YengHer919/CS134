@@ -49,7 +49,7 @@ void SpriteList::remove(int i) {
 //  location based on velocity and direction.
 //
 void SpriteList::update() {
-
+	checkCollisions();
 	if (sprites.size() == 0) return;
 	vector<Sprite>::iterator s = sprites.begin();
 	vector<Sprite>::iterator tmp;
@@ -121,7 +121,7 @@ void Emitter::draw() {
 			image.draw(-image.getWidth() / 2.0, -image.getHeight() / 2.0);
 		}
 		else {
-			ofSetColor(0, 0, 200);
+			ofSetColor(color);
 			ofDrawTriangle(
 				-width / 2, height / 2,       // Bottom left point
 				width / 2, height / 2,        // Bottom right point
