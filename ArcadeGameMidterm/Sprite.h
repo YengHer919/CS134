@@ -82,5 +82,28 @@ public:
 	// default verts for polyline shape if no image on sprite
 	//
 	vector<glm::vec3> verts;
+
+
+
+	// New collision-related methods
+	bool checkCollision(Sprite* other) {
+		// Circular collision detection
+		glm::vec3 thisPos = getTransform()[3];
+		glm::vec3 otherPos = other->getTransform()[3];
+		
+		float thisRadius = (width + height) / 4.0f;
+		float otherRadius = (other->width + other->height) / 4.0f;
+
+		// Calculate the distance between sprite centers
+		float distance = glm::distance(thisPos, otherPos);
+
+		return distance < (thisRadius + otherRadius);
+	}
+
+	virtual void onCollision(Sprite* other) {
+		// Default collision behavior: destroy both sprites
+		lifespan = 0;
+		if (other) other->lifespan = 0;
+	}
 };
 
