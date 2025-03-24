@@ -40,3 +40,69 @@ public:
 	
 	
 };
+
+// Update the Pillar class to include orientation
+class Pillar : public Shape {
+public:
+	enum Orientation { VERTICAL, HORIZONTAL };
+
+	Pillar(Orientation orient = VERTICAL) {
+		orientation = orient;
+		width = 30; // Default width
+
+		// Set dimensions based on orientation
+		if (orientation == VERTICAL) {
+			height = ofGetHeight(); // Full screen height for vertical pillars
+		}
+		else {
+			width = ofGetWidth(); // Full screen width for horizontal pillars
+			height = 30; // Height for horizontal pillars
+		}
+
+		lifespan = 5000; // 5 seconds in milliseconds
+		birthtime = ofGetElapsedTimeMillis();
+		color = ofColor::red;
+	}
+
+	void draw() {
+		ofPushMatrix();
+		ofMultMatrix(getTransform());
+		ofSetColor(color);
+		ofDrawRectangle(-width / 2, -height / 2, width, height);
+		ofPopMatrix();
+	}
+
+	bool isAlive() {
+		return (ofGetElapsedTimeMillis() - birthtime < lifespan);
+	}
+
+	float width, height;
+	float lifespan;
+	uint64_t birthtime;
+	ofColor color;
+	Orientation orientation;
+};
+
+// First, update the WarningPillar class in your ofApp.h file
+class WarningPillar : public Pillar {
+public:
+	// Single constructor with orientation parameter
+	WarningPillar(Pillar::Orientation orient) : Pillar(orient) {
+		// Apply different scaling based on orientation
+		if (orient == Pillar::VERTICAL) {
+			width = width * 0.25;
+		}
+		else { // HORIZONTAL
+			height = height * 0.25;
+		}
+		color = ofColor::yellow;
+		birthtime = ofGetElapsedTimeMillis();
+		storedOrientation = orient;
+	}
+	bool isWarningComplete() {
+		return (ofGetElapsedTimeMillis() - birthtime > warningTime);
+	}
+
+	Pillar::Orientation storedOrientation;
+	float warningTime = 2000;
+};
