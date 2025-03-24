@@ -14,6 +14,15 @@ public:
 	void update();
 	void draw();
 	vector<Sprite> sprites;
+	void checkCollisions() {
+		for (int i = 0; i < sprites.size(); i++) {
+			for (int j = i + 1; j < sprites.size(); j++) {
+				if (sprites[i].checkCollision(&sprites[j])) {
+					sprites[i].onCollision(&sprites[j]);
+				}
+			}
+		}
+	}
 };
 
 
@@ -58,5 +67,6 @@ public:
 	bool haveChildImage;
 	bool haveImage;
 	float width, height;
+	ofColor color = ofColor::blue;
 };
 
